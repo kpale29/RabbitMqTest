@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: rabbit-service
+spec:
+  selector:
+    app.kubernetes.io/name: rabbit-redis-consumers
+  ports:
+    - name: managment
+      protocol: TCP
+      port: 15672
+      targetPort: 15672
+    - name: connection
+      protocol: TCP
+      port: 5672
+      targetPort: 5672
+  type: LoadBalancer

@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rabbit-redis-consumers
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: rabbit-redis-consumers
+  template:
+    metadata:
+      labels:
+        app: rabbit-redis-consumers
+    spec: 
+      containers:
+      - name: rabbit
+        image: rabbitmq:3-management
+        ports: 
+        - containerPort: 15672
+        - containerPort: 5672

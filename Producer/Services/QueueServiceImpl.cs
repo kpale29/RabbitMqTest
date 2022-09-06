@@ -22,11 +22,9 @@ namespace Producer.Services{
             ");
 
             ConnectionFactory? factory = new ConnectionFactory(){ 
-                HostName = "https://b-fc22b968-88b0-498b-ab54-fd12be568fea.mq.us-east-1.amazonaws.com",
-                UserName = "administrator",
-                Password = "P1assw3rd#852",
-                VirtualHost = "/"  
+                HostName = "localhost"
             };
+            
             using (var connection = factory.CreateConnection())
             using (var channel = connection.CreateModel())
             {
@@ -34,16 +32,22 @@ namespace Producer.Services{
                     queue: "MsQueue",
                     exclusive: false,
                     autoDelete: false,
-                    arguments: null
+                    arguments: null,
+                    durable: true
                 );
 
                 string message = model.message;
                 var body = Encoding.UTF8.GetBytes(message);    
+
+                channel.ExchangeDeclare(
+                    exchange: "tdc-honduras", 
+                    type: ExchangeType.Direct,
+                    durable: true
+                    );
                 
                 channel.BasicPublish(
-                    exchange: "",
-                    routingKey: "hello",
-                    basicProperties: null,
+                    exchange: "tdc-honduras",
+                    routingKey: "MsQueue",
                     body: body
                 );
 
